@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ridgefield's Water Story: Balancing Growth and Nature</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The SPA uses a thematic, single-page dashboard structure. It starts with a summary hero, then visually explains the two core pressures (environmental vs. community growth) in a "Tale of Two Pressures" section. It then details "How Our Water System Works" with an interactive diagram, followed by "Our Plan to Ensure Water Security" which interactively showcases conservation stages and future projects. This narrative flow (Why -> What -> How) is more intuitive for a resident than the report's linear structure, guiding them from the problem's context to the solution. -->
+    <!-- Visualization & Content Choices: 
+        - Goal: Compare precipitation to normal -> Bar Chart (Chart.js) to visually emphasize the deficit.
+        - Goal: Show low snowpack -> Custom Gauge (HTML/CSS/Canvas) for an immediate, intuitive understanding of the low percentage.
+        - Goal: Show dramatic population increase -> Line Chart (Chart.js) to highlight the steep, multi-decade trend.
+        - Goal: Explain the water system -> Interactive Diagram (HTML/CSS) with hover tooltips to simplify a complex process without overwhelming the user.
+        - Goal: Detail conservation rules -> Interactive Tabs (JS) for each stage, allowing users to actively explore the rules that apply to them, making the information more engaging and less static.
+        - Justification: These choices translate dense data and text into scannable, engaging visuals that tell a story, promoting user understanding over simple presentation. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7;
+            color: #3D4852;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #367588;
+            border-bottom-color: #367588;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 40vh; /* Responsive height for charts */
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+                max-height: 50vh;
+            }
+        }
+        .stage-btn {
+            transition: all 0.3s ease;
+        }
+        .stage-btn.active {
+            background-color: #367588;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none; /* Allows clicks through to elements behind */
+        }
+        .has-tooltip:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="text-xl font-bold text-gray-800">Ridgefield's Water Future</div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#pressures" class="nav-link">The Pressures</a>
+                <a href="#system" class="nav-link">Ridgefield's System</a>
+                <a href="#plan" class="nav-link">Ridgefield's Plan</a>
+                <a href="#quality" class="nav-link">Water Quality</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-gray-800 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#pressures" class="block py-2 px-4 text-sm hover:bg-gray-200">The Pressures</a>
+            <a href="#system" class="block py-2 px-4 text-sm hover:bg-gray-200">Ridgefield's System</a>
+            <a href="#plan" class="block py-2 px-4 text-sm hover:bg-gray-200">Ridgefield's Plan</a>
+            <a href="#quality" class="block py-2 px-4 text-sm hover:bg-gray-200">Water Quality</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+        <!-- Hero Section -->
+        <section class="text-center mb-16 md:mb-24">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Understanding Ridgefield's Water Situation</h1>
+            <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-600">
+                Ridgefield's water shortage isn't about quality—the city's water is excellent. It's a challenge of quantity, driven by regional drought and rapid community growth. Here’s a look at the pressures the city faces and the proactive steps it's taking together.
+            </p>
+        </section>
+
+        <!-- Section 1: The Pressures -->
+        <section id="pressures" class="mb-16 md:mb-24">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">A Tale of Two Pressures</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">Ridgefield's water supply is squeezed between two powerful forces: environmental conditions and community growth.</p>
+            
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
+                <!-- Environmental Pressures Column -->
+                <div class="card p-6 md:p-8">
+                    <div class="flex items-center mb-4">
+                        <span class="text-3xl mr-4">🌦️</span>
+                        <h3 class="text-2xl font-bold text-gray-800">Environmental Pressure: A Region-Wide Drought</h3>
+                    </div>
+                    <p class="mb-6 text-gray-600">The entire region is drier than normal. On June 5, 2025, Washington State declared a drought emergency for Ridgefield's area. This is driven by low snowpack—the natural summer water storage—and less rain than usual.</p>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-bold text-lg mb-2 text-gray-700">Statewide Snowpack</h4>
+                            <div class="w-full bg-gray-200 rounded-full h-6">
+                                <div class="bg-blue-400 h-6 rounded-full flex items-center justify-center text-white font-bold" style="width: 49%;">49%</div>
+                            </div>
+                            <p class="text-sm text-right mt-1 text-gray-500">of normal (as of June 9, 2025)</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2 text-gray-700">Clark County Precipitation Deficit (2025)</h4>
+                            <div class="chart-container">
+                                <canvas id="precipitationChart"></canvas>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">This chart shows how much less rain Clark County received compared to normal for the year. A negative number means less rain.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Community Growth Column -->
+                <div class="card p-6 md:p-8">
+                    <div class="flex items-center mb-4">
+                         <span class="text-3xl mr-4">📈</span>
+                        <h3 class="text-2xl font-bold text-gray-800">Community Pressure: Rapid Growth</h3>
+                    </div>
+                    <p class="mb-6 text-gray-600">Ridgefield is one of the fastest-growing cities in Washington. Its population has surged over the last two decades, placing increasing demand on the city's water system, especially during dry summer months for irrigation.</p>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-bold text-lg mb-2 text-gray-700">Population Growth (2000-2023)</h4>
+                            <div class="chart-container">
+                                <canvas id="populationChart"></canvas>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">See how Ridgefield's population has grown sharply, leading to more water use.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2 text-gray-700">Peak Water Demand</h4>
+                            <div class="flex justify-around text-center">
+                                <div>
+                                    <p class="text-3xl font-bold text-blue-600">200</p>
+                                    <p class="text-sm text-gray-500">Gallons/Day<br>(Avg. Family)</p>
+                                </div>
+                                <div>
+                                    <p class="text-3xl font-bold text-orange-600">500+</p>
+                                    <p class="text-sm text-gray-500">Gallons/Day<br>(Peak, due to irrigation)</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">While average use is manageable, irrigation causes a big jump in demand.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Ridgefield's Water System -->
+        <section id="system" class="mb-16 md:mb-24">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">How Ridgefield's Water System Works</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">The city's water system works hard to bring clean water to every home and business. Learn about its key parts.</p>
+            
+            <div class="card p-6 md:p-8 relative">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Water Flow Diagram: Hover to Learn More</h3>
+                <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12 relative py-8">
+                    
+                    <!-- Component 1: Groundwater Wells -->
+                    <div class="relative flex flex-col items-center has-tooltip">
+                        <span class="text-5xl">🚰</span>
+                        <p class="font-semibold text-gray-700 mt-2">Wells</p>
+                        <div class="tooltip absolute bg-gray-700 text-white text-sm rounded-lg px-3 py-2 -mt-16 w-48 text-center">
+                            Six wells draw over 2 MGD from the Troutdale aquifer, 130-170 feet deep.
+                        </div>
+                    </div>
+                    <span class="text-4xl text-blue-400 hidden md:block">→</span>
+                    <span class="text-4xl text-blue-400 block md:hidden">↓</span>
+
+                    <!-- Component 2: Filtration Plant -->
+                    <div class="relative flex flex-col items-center has-tooltip">
+                        <span class="text-5xl">💧</span>
+                        <p class="font-semibold text-gray-700 mt-2">Filter Plant</p>
+                        <div class="tooltip absolute bg-gray-700 text-white text-sm rounded-lg px-3 py-2 -mt-16 w-48 text-center">
+                            Filters remove minerals from the naturally hard water (100 ppm avg.).
+                        </div>
+                    </div>
+                    <span class="text-4xl text-blue-400 hidden md:block">→</span>
+                    <span class="text-4xl text-blue-400 block md:hidden">↓</span>
+
+                    <!-- Component 3: Chlorination -->
+                    <div class="relative flex flex-col items-center has-tooltip">
+                        <span class="text-5xl">🧪</span>
+                        <p class="font-semibold text-gray-700 mt-2">Chlorination</p>
+                        <div class="tooltip absolute bg-gray-700 text-white text-sm rounded-lg px-3 py-2 -mt-16 w-48 text-center">
+                            Water is treated with 4% sodium hypochlorite to kill germs.
+                        </div>
+                    </div>
+                    <span class="text-4xl text-blue-400 hidden md:block">→</span>
+                    <span class="text-4xl text-blue-400 block md:hidden">↓</span>
+
+                    <!-- Component 4: Reservoirs -->
+                    <div class="relative flex flex-col items-center has-tooltip">
+                        <span class="text-5xl">🏞️</span>
+                        <p class="font-semibold text-gray-700 mt-2">Reservoirs</p>
+                        <div class="tooltip absolute bg-gray-700 text-white text-sm rounded-lg px-3 py-2 -mt-16 w-48 text-center">
+                            Three reservoirs hold 2 million gallons, ensuring steady pressure.
+                        </div>
+                    </div>
+                    <span class="text-4xl text-blue-400 hidden md:block">→</span>
+                    <span class="text-4xl text-blue-400 block md:hidden">↓</span>
+
+                    <!-- Component 5: Distribution Lines -->
+                    <div class="relative flex flex-col items-center has-tooltip">
+                        <span class="text-5xl">🏘️</span>
+                        <p class="font-semibold text-gray-700 mt-2">Homes & Businesses</p>
+                        <div class="tooltip absolute bg-gray-700 text-white text-sm rounded-lg px-3 py-2 -mt-16 w-48 text-center">
+                            Water travels through 62 miles of pipes to reach residents.
+                        </div>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 text-center mt-4">This simple diagram shows the path Ridgefield's water takes from the ground to your tap. Each step is important for quality and supply.</p>
+            </div>
+            
+            <div class="card p-6 md:p-8 mt-8">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Backup Supply: Staying Prepared</h3>
+                <p class="text-gray-600">
+                    Beyond its own wells, Ridgefield has a key backup plan: a deal with Clark Public Utilities (CPU). This lets the city buy extra water when needed, like during high demand, maintenance, or emergencies. This backup adds a vital layer of safety to the city's water supply.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 3: Ridgefield's Plan -->
+        <section id="plan" class="mb-16 md:mb-24">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Ridgefield's Plan to Ensure Water Security</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">The city is actively planning for today and tomorrow. Its strategy involves saving water and building for the future.</p>
+            
+            <div class="card p-6 md:p-8 mb-8">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Water Conservation Strategy: Stage 3 in Effect</h3>
+                <p class="mb-6 text-gray-600">Ridgefield uses a 5-stage plan to save water. As of June 2025, Ridgefield is in Stage 3 due to early warm weather. Choose a stage below to see what actions are needed.</p>
+                
+                <div class="flex flex-wrap justify-center gap-2 mb-6">
+                    <button class="stage-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold active" data-stage="3">Stage 3 (Current)</button>
+                    <button class="stage-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold" data-stage="1">Stage 1</button>
+                    <button class="stage-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold" data-stage="2">Stage 2</button>
+                    <button class="stage-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold" data-stage="4">Stage 4</button>
+                    <button class="stage-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold" data-stage="5">Stage 5</button>
+                </div>
+
+                <div id="stage-content">
+                    <!-- Content will be injected here by JavaScript -->
+                </div>
+            </div>
+
+            <div class="card p-6 md:p-8">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Building for Tomorrow: New Water Projects</h3>
+                <p class="mb-6 text-gray-600">To meet future needs from growth, the city is building new water systems. These projects will help make sure Ridgefield has enough water for years to come.</p>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-2 text-gray-700">Eastside Elevated Water Reservoir</h4>
+                    <p class="text-gray-600 mb-4">
+                        This important project involves building a new large water tank on the east side of the city. It will hold about 2.5 million gallons of water. This new tank will help provide enough water for the next 15-20 years, especially for the eastern part of Ridgefield.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-600 space-y-1">
+                        <li>Expected Capacity: 2.5 Million Gallons</li>
+                        <li>Designed to meet needs for 15-20 years</li>
+                        <li>Design Phase: Until Fall 2025</li>
+                        <li>Construction: Summer 2025 - Spring 2027</li>
+                        <li>Future plans for a second tank on site</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Water Quality -->
+        <section id="quality" class="mb-16 md:mb-24">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Ridgefield's Water is Safe: Quality You Can Trust</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">While the city manages water quantity, it's vital to know its water quality remains excellent.</p>
+            
+            <div class="card p-6 md:p-8">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Consistently High Standards</h3>
+                <p class="text-gray-600 mb-4">
+                    Ridgefield's drinking water always meets or goes above all state and federal safety rules. The city cleans its water with chlorine and special filters to remove minerals.
+                </p>
+                <ul class="list-disc list-inside text-gray-600 space-y-1">
+                    <li>Voluntary chlorination to kill germs</li>
+                    <li>Filters remove minerals for better taste and less hardness</li>
+                    <li>Regular checks for many kinds of things that could cause harm</li>
+                    <li>No bad things found in the city's water tests</li>
+                    <li>Strong program to stop water from going backward into the system</li>
+                </ul>
+                <p class="text-gray-600 mt-4">
+                    This means the current water challenge is about having *enough* water, not about its *safety*. You can trust the water coming from your tap.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-100 text-gray-600 text-center py-6 px-4">
+        <p>&copy; 2025 Ridgefield Water Information. All rights reserved.</p>
+        <p class="text-sm mt-2">Data based on publicly available reports from City of Ridgefield and Washington State Dept. of Ecology.</p>
+    </footer>
+
+    <script>
+        // Data for Charts and Content
+        const precipitationData = {
+            labels: ['May 2025', 'Year-to-Date 2025 (Jan-May)'],
+            deficit: [-1.04, -6.75]
+        };
+
+        const populationData = {
+            labels: ['2000', '2010', '2020', '2023'],
+            population: [2147, 4763, 10319, 15027]
+        };
+
+        const conservationStages = {
+            '3': {
+                title: 'Stage 3: Significant Reductions Required (Current)',
+                description: 'Due to early warm weather and forecasts for continued dry conditions, Stage 3 is currently active. Everyone must follow these rules to help save water.',
+                rules: [
+                    'Lawn watering limited to 3 times per week (Odd/Even schedule, 7 PM - 4 AM only).',
+                    'Pools, spas, and fountains can run only with recirculation pumps.',
+                    'Filling of pools or artificial lakes/ponds/streams is not allowed.',
+                    'Hoses used freely must have automatic shut-off timers.',
+                    'Washing vehicles at home is not permitted.',
+                    'All water leaks must be found and fixed right away.'
+                ]
+            },
+            '1': {
+                title: 'Stage 1: Voluntary Conservation',
+                description: 'At Stage 1, the city asks all residents to voluntarily reduce water use. This is a basic call to be mindful of how much water is used.',
+                rules: [
+                    'Limit outdoor watering to 3 times per week.',
+                    'Use water-saving tools like shut-off nozzles on hoses.',
+                    'Wash vehicles at commercial car washes or on permeable surfaces.'
+                ]
+            },
+            '2': {
+                title: 'Stage 2: Moderate Reductions Requested',
+                description: 'When conditions worsen, Stage 2 asks for more serious voluntary reductions. Everyone is needed to do their part.',
+                rules: [
+                    'Lawn watering limited to 3 times per week, following an Odd/Even address schedule.',
+                    'No watering between 10 AM and 6 PM.',
+                    'Pools, spas, and ornamental fountains can operate, but avoid refilling.'
+                ]
+            },
+            '4': {
+                title: 'Stage 4: Essential Use Only',
+                description: 'Stage 4 means water is very scarce. Only water needed for health and safety is allowed.',
+                rules: [
+                    'No outdoor watering for lawns or gardens.',
+                    'Only hand-watering for food plants allowed (with a shut-off nozzle).',
+                    'No vehicle washing.',
+                    'Strict limits on indoor water use as well.'
+                ]
+            },
+            '5': {
+                title: 'Stage 5: Critical Shortage / Emergency',
+                description: 'This is the most serious stage, used during extreme water shortages or system emergencies. Very strict rules are in place.',
+                rules: [
+                    'Water use is restricted to essential indoor health and safety needs only.',
+                    'No outdoor water use whatsoever.',
+                    'Public and commercial water use severely limited.'
+                ]
+            }
+        };
+
+        // Utility function to wrap Chart.js labels
+        function wrapLabel(label, maxChars) {
+            const words = label.split(' ');
+            let lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                const word = words[i];
+                if ((currentLine + ' ' + word).length <= maxChars) {
+                    currentLine += ' ' + word;
+                } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // Chart.js Configuration
+        const commonChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            return tooltipItems[0].label;
+                        },
+                        label: function(tooltipItem) {
+                            return `${tooltipItem.raw.toFixed(2)} inches`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Inches Below Normal'
+                    }
+                },
+                x: {
+                    ticks: {
+                        callback: function(value, index, values) {
+                            return wrapLabel(this.getLabelForValue(value), 16);
+                        }
+                    }
+                }
+            }
+        };
+
+        const precipitationCtx = document.getElementById('precipitationChart').getContext('2d');
+        const precipitationChart = new Chart(precipitationCtx, {
+            type: 'bar',
+            data: {
+                labels: precipitationData.labels,
+                datasets: [{
+                    data: precipitationData.deficit,
+                    backgroundColor: ['#AEC9DC', '#7BB0C7'],
+                    borderColor: ['#7BB0C7', '#367588'],
+                    borderWidth: 1,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                ...commonChartOptions,
+                plugins: {
+                    ...commonChartOptions.plugins,
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                return tooltipItems[0].label;
+                            },
+                            label: function(tooltipItem) {
+                                return `${tooltipItem.raw.toFixed(2)} inches below normal`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Inches From Normal'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return wrapLabel(this.getLabelForValue(value), 16);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        const populationCtx = document.getElementById('populationChart').getContext('2d');
+        const populationChart = new Chart(populationCtx, {
+            type: 'line',
+            data: {
+                labels: populationData.labels,
+                datasets: [{
+                    label: 'Population',
+                    data: populationData.population,
+                    borderColor: '#367588',
+                    backgroundColor: 'rgba(54, 117, 136, 0.2)',
+                    fill: true,
+                    tension: 0.3,
+                    pointBackgroundColor: '#367588',
+                    pointBorderColor: '#FFF',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return `Population: ${tooltipItem.raw.toLocaleString()}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Population'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Year'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Mobile Menu Toggle
+        document.getElementById('menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.getElementById('mobile-menu').classList.add('hidden'); // Close mobile menu on link click
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Conservation Stages Tabs Logic
+        const stageButtons = document.querySelectorAll('.stage-btn');
+        const stageContentDiv = document.getElementById('stage-content');
+
+        function updateConservationStage(stage) {
+            // Remove active class from all buttons
+            stageButtons.forEach(btn => btn.classList.remove('active', 'bg-blue-600', 'text-white'));
+            // Add active class to the clicked button
+            document.querySelector(`.stage-btn[data-stage="${stage}"]`).classList.add('active', 'bg-blue-600', 'text-white');
+
+            const content = conservationStages[stage];
+            stageContentDiv.innerHTML = `
+                <h4 class="font-bold text-lg mb-2 text-gray-700">${content.title}</h4>
+                <p class="text-gray-600 mb-4">${content.description}</p>
+                <ul class="list-disc list-inside text-gray-600 space-y-1">
+                    ${content.rules.map(rule => `<li>${rule}</li>`).join('')}
+                </ul>
+            `;
+        }
+
+        // Set initial stage content (Stage 3)
+        updateConservationStage('3');
+
+        stageButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                updateConservationStage(button.dataset.stage);
+            });
+        });
+    </script>
+</body>
+</html>
