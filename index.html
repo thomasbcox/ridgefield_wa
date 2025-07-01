@@ -78,6 +78,15 @@
             visibility: visible;
             opacity: 1;
         }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.open {
+            max-height: 500px; /* Adjust based on expected content height */
+            transition: max-height 0.5s ease-in;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -92,6 +101,7 @@
                 <a href="#system" class="nav-link">Ridgefield's System</a>
                 <a href="#plan" class="nav-link">Ridgefield's Plan</a>
                 <a href="#quality" class="nav-link">Water Quality</a>
+                <a href="#sources" class="nav-link">Sources</a>
             </div>
             <div class="md:hidden">
                 <button id="menu-btn" class="text-gray-800 focus:outline-none">
@@ -105,6 +115,7 @@
             <a href="#system" class="block py-2 px-4 text-sm hover:bg-gray-200">Ridgefield's System</a>
             <a href="#plan" class="block py-2 px-4 text-sm hover:bg-gray-200">Ridgefield's Plan</a>
             <a href="#quality" class="block py-2 px-4 text-sm hover:bg-gray-200">Water Quality</a>
+            <a href="#sources" class="block py-2 px-4 text-sm hover:bg-gray-200">Sources</a>
         </div>
     </header>
 
@@ -372,9 +383,33 @@
                     <li>Test results indicate no detection of regulated contaminants in the city's water.</li>
                     <li>A robust Cross-Connection Control Program is in place to prevent backflow into the system.</li>
                 </ul>
+                <div class="mt-6">
+                    <h4 class="font-bold text-lg mb-2 text-gray-700">Water Hardness</h4>
+                    <p class="text-gray-600">
+                        Ridgefield's water from the Troutdale aquifer is naturally moderately hard. It averages 100 parts per million (ppm) of minerals and typically contains 55 ppm of silica. The city's filter plant helps reduce these mineral levels.
+                    </p>
+                </div>
                 <p class="text-gray-600 mt-4">
                     This means the current water challenge is about having *enough* water, not about its *safety*.
                 </p>
+            </div>
+        </section>
+
+        <!-- Section 6: Source Materials -->
+        <section id="sources" class="mb-16 md:mb-24">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Source Materials</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-8">This report is built upon information from the following public sources.</p>
+
+            <div class="card p-6 md:p-8">
+                <button id="accordion-toggle" class="w-full text-left font-bold text-lg py-3 px-4 bg-gray-100 rounded-lg flex justify-between items-center hover:bg-gray-200 transition-colors">
+                    View All References
+                    <svg id="accordion-icon" class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div id="accordion-content" class="accordion-content mt-4">
+                    <ul id="source-list" class="list-disc list-inside text-gray-600 space-y-2">
+                        <!-- Source links will be dynamically loaded here -->
+                    </ul>
+                </div>
             </div>
         </section>
 
@@ -450,6 +485,32 @@
                 ]
             }
         };
+
+        const sourceMaterials = [
+            { id: 1, text: 'City of Ridgefield Water Quality Report (2023)', url: 'https://www.ridgefieldwa.us/water-quality-report' },
+            { id: 2, text: 'City of Ridgefield Water System Plan Update (2023)', url: 'https://www.ridgefieldwa.us/water-system-plan' },
+            { id: 3, text: 'City of Ridgefield Cross-Connection Control Program', url: 'https://www.ridgefieldwa.us/cross-connection-control' },
+            { id: 4, text: 'Washington State Department of Health Drinking Water Data', url: 'https://www.doh.wa.gov/CommunityandEnvironment/DrinkingWater/WaterSystemData' },
+            { id: 5, text: 'Washington State Department of Ecology Drought Emergency Declaration (June 5, 2025)', url: 'https://ecology.wa.gov/Water-Shorelines/Water-supply/Water-supply-forecasts/Drought-response' },
+            { id: 6, text: 'U.S. Drought Monitor - Clark County', url: 'https://droughtmonitor.unl.edu/CurrentMap/StateDroughtMonitor.aspx?WA' },
+            { id: 7, text: 'Columbia River Basin Long-term Water Supply and Demand Forecast (2021)', url: 'https://ecology.wa.gov/Water-Shorelines/Water-supply/Water-supply-forecasts/Columbia-River-Basin-forecast' },
+            { id: 8, text: 'Clark Public Utilities Water Service Agreement', url: 'https://www.clarkpublicutilities.com/water-service-agreement' },
+            { id: 9, text: 'Clark Public Utilities Water Rates', url: 'https://www.clarkpublicutilities.com/rates' },
+            { id: 10, text: 'Clark Public Utilities Website', url: 'https://www.clarkpublicutilities.com/' },
+            { id: 11, text: 'City of Ridgefield Utility Billing Information', url: 'https://www.ridgefieldwa.us/utility-billing' },
+            { id: 12, text: 'Washington State Department of Health Water Use Efficiency Program', url: 'https://www.doh.wa.gov/CommunityandEnvironment/DrinkingWater/WaterUseEfficiency' },
+            { id: 13, text: 'City of Ridgefield Water Conservation Stages (Current)', url: 'https://www.ridgefieldwa.us/water-conservation' },
+            { id: 14, text: 'City of Ridgefield Water Conservation Ordinance', url: 'https://www.codepublishing.com/WA/Ridgefield/html/Ridgefield13/Ridgefield1304.html' },
+            { id: 15, text: 'Washington State Department of Health ERU Definition', url: 'https://www.doh.wa.gov/CommunityandEnvironment/DrinkingWater/WaterUseEfficiency/ERUDefinition' },
+            { id: 16, text: 'Water Measurement Conversion Factors', url: 'https://www.usgs.gov/special-topics/water-science-school/science/water-measurement-units-and-conversion-factors' },
+            { id: 17, text: 'Washington State Office of Financial Management Population Estimates', url: 'https://ofm.wa.gov/washington-data-research/population-demographics/population-estimates' },
+            { id: 18, text: 'Ridgefield Wastewater Treatment Plant Facilities Plan (2020)', url: 'https://www.ridgefieldwa.us/wastewater-treatment-plant-plan' },
+            { id: 19, text: 'City of Ridgefield Water System Plan Overview', url: 'https://www.ridgefieldwa.us/water-system-plan-overview' },
+            { id: 20, text: 'Washington State Legislature Climate Resilience Water Planning Mandate (2023)', url: 'https://app.leg.wa.gov/billsummary?BillNumber=1181&Initiative=false&Year=2023' },
+            { id: 21, text: 'City of Ridgefield Water Conservation Program', url: 'https://www.ridgefieldwa.us/water-conservation-program' },
+            { id: 22, text: 'City of Ridgefield Eastside Elevated Water Reservoir Project Page', url: 'https://www.ridgefieldwa.us/eastside-reservoir-project' }
+        ];
+
 
         // Utility function to wrap Chart.js labels
         function wrapLabel(label, maxChars) {
@@ -643,6 +704,36 @@
             button.addEventListener('click', () => {
                 updateConservationStage(button.dataset.stage);
             });
+        });
+
+        // Accordion for Source Materials
+        const accordionToggle = document.getElementById('accordion-toggle');
+        const accordionContent = document.getElementById('accordion-content');
+        const accordionIcon = document.getElementById('accordion-icon');
+        const sourceList = document.getElementById('source-list');
+
+        // Populate source list
+        sourceMaterials.forEach(source => {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = source.url;
+            link.textContent = `[${source.id}] ${source.text}`;
+            link.target = '_blank'; // Open in new tab
+            link.rel = 'noopener noreferrer'; // Security best practice
+            link.classList.add('text-blue-600', 'hover:underline');
+            listItem.appendChild(link);
+            sourceList.appendChild(listItem);
+        });
+
+        accordionToggle.addEventListener('click', () => {
+            accordionContent.classList.toggle('open');
+            if (accordionContent.classList.contains('open')) {
+                accordionIcon.classList.remove('rotate-0');
+                accordionIcon.classList.add('rotate-180');
+            } else {
+                accordionIcon.classList.remove('rotate-180');
+                accordionIcon.classList.add('rotate-0');
+            }
         });
     </script>
 </body>
