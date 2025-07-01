@@ -1,2 +1,3 @@
 # ridgefield_wa
-collection of documents related to Ridgefield, Washington
+A collection of documents related to Ridgefield, Washington.
+Assembled by Thomas B. Cox.
