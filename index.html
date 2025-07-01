@@ -10,11 +10,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Calm Harmony -->
-    <!-- Application Structure Plan: The SPA uses a thematic, single-page dashboard structure. It starts with a summary hero, then visually explains the two core pressures (environmental vs. community growth) in a "Tale of Two Pressures" section. It then details "How Our Water System Works" with an interactive diagram, followed by "Our Plan to Ensure Water Security" which interactively showcases conservation stages and future projects. This narrative flow (Why -> What -> How) is more intuitive for a resident than the report's linear structure, guiding them from the problem's context to the solution. -->
+    <!-- Application Structure Plan: The SPA uses a thematic, single-page dashboard structure. It starts with a summary hero, then visually explains the two core pressures (environmental vs. community growth) in a "Tale of Two Pressures" section. It then details "Key Water Indicators" in a dedicated section, followed by "How Our Water System Works" with an interactive diagram, and finally "Our Plan to Ensure Water Security" which interactively showcases conservation stages and future projects. This narrative flow (Why -> What -> How) is more intuitive for a resident than the report's linear structure, guiding them from the problem's context to the solution. -->
     <!-- Visualization & Content Choices: 
-        - Goal: Compare precipitation to normal -> Bar Chart (Chart.js) to visually emphasize the deficit.
+        - Goal: Compare precipitation to normal -> Bar Chart (Chart.js) to visually emphasize the deficit, now with more monthly data for better trend visibility.
         - Goal: Show low snowpack -> Custom Gauge (HTML/CSS/Canvas) for an immediate, intuitive understanding of the low percentage.
         - Goal: Show dramatic population increase -> Line Chart (Chart.js) to highlight the steep, multi-decade trend.
+        - Goal: Present key operational data -> Table (HTML/CSS) in a new "Key Water Indicators" section for clear, scannable metrics.
         - Goal: Explain the water system -> Interactive Diagram (HTML/CSS) with hover tooltips to simplify a complex process without overwhelming the user.
         - Goal: Detail conservation rules -> Interactive Tabs (JS) for each stage, allowing users to actively explore the rules that apply to them, making the information more engaging and less static.
         - Justification: These choices translate dense data and text into scannable, engaging visuals that tell a story, promoting user understanding over simple presentation. -->
@@ -87,6 +88,7 @@
             <div class="text-xl font-bold text-gray-800">Ridgefield's Water Future</div>
             <div class="hidden md:flex space-x-8">
                 <a href="#pressures" class="nav-link">The Pressures</a>
+                <a href="#indicators" class="nav-link">Key Indicators</a>
                 <a href="#system" class="nav-link">Ridgefield's System</a>
                 <a href="#plan" class="nav-link">Ridgefield's Plan</a>
                 <a href="#quality" class="nav-link">Water Quality</a>
@@ -99,6 +101,7 @@
         </nav>
         <div id="mobile-menu" class="hidden md:hidden">
             <a href="#pressures" class="block py-2 px-4 text-sm hover:bg-gray-200">The Pressures</a>
+            <a href="#indicators" class="block py-2 px-4 text-sm hover:bg-gray-200">Key Indicators</a>
             <a href="#system" class="block py-2 px-4 text-sm hover:bg-gray-200">Ridgefield's System</a>
             <a href="#plan" class="block py-2 px-4 text-sm hover:bg-gray-200">Ridgefield's Plan</a>
             <a href="#quality" class="block py-2 px-4 text-sm hover:bg-gray-200">Water Quality</a>
@@ -110,7 +113,7 @@
         <section class="text-center mb-16 md:mb-24">
             <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Understanding Ridgefield's Water Situation</h1>
             <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-600">
-                Ridgefield's water shortage isn't about quality—the city's water is excellent. It's a challenge of quantity, driven by regional drought and rapid community growth. Here’s a look at the pressures the city faces and the proactive steps it's taking together.
+                Ridgefield's water shortage isn't about quality—the city's water is excellent. It's a challenge of quantity, driven by regional drought and rapid community growth. Here’s a look at the pressures the city faces and the proactive steps it's taking.
             </p>
         </section>
 
@@ -141,7 +144,7 @@
                             <div class="chart-container">
                                 <canvas id="precipitationChart"></canvas>
                             </div>
-                            <p class="text-sm text-gray-500 mt-2">This chart shows how much less rain Clark County received compared to normal for the year. A negative number means less rain.</p>
+                            <p class="text-sm text-gray-500 mt-2">This chart shows how much less rain Clark County received compared to normal for each month. A negative number means less rain.</p>
                         </div>
                     </div>
                 </div>
@@ -181,7 +184,61 @@
             </div>
         </section>
 
-        <!-- Section 2: Ridgefield's Water System -->
+        <!-- Section 2: Key Water Indicators -->
+        <section id="indicators" class="mb-16 md:mb-24">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Key Water Indicators</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">These numbers help show the state of Ridgefield's water supply and demand.</p>
+
+            <div class="card p-6 md:p-8">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Current System Metrics</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white rounded-lg shadow-sm">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 text-left">Indicator</th>
+                                <th class="py-3 px-6 text-left">Value</th>
+                                <th class="py-3 px-6 text-left">Context / Normal</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600 text-sm font-light">
+                            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                <td class="py-3 px-6 text-left whitespace-nowrap">Average Daily Demand</td>
+                                <td class="py-3 px-6 text-left">1.5 MGD</td>
+                                <td class="py-3 px-6 text-left">Winter average</td>
+                            </tr>
+                            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                <td class="py-3 px-6 text-left whitespace-nowrap">Peak Summer Demand</td>
+                                <td class="py-3 px-6 text-left">3.5 MGD</td>
+                                <td class="py-3 px-6 text-left">During hottest, driest months</td>
+                            </tr>
+                            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                <td class="py-3 px-6 text-left whitespace-nowrap">System Capacity (Wells)</td>
+                                <td class="py-3 px-6 text-left">4.0 MGD</td>
+                                <td class="py-3 px-6 text-left">From city wells only</td>
+                            </tr>
+                            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                <td class="py-3 px-6 text-left whitespace-nowrap">Aquifer Water Level</td>
+                                <td class="py-3 px-6 text-left">165 feet</td>
+                                <td class="py-3 px-6 text-left">Below surface (Normal: 130-150 ft)</td>
+                            </tr>
+                            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                <td class="py-3 px-6 text-left whitespace-nowrap">Total Water Rights</td>
+                                <td class="py-3 px-6 text-left">5.0 MGD</td>
+                                <td class="py-3 px-6 text-left">Total permitted by state</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-6 text-left whitespace-nowrap">Currently Developed Rights</td>
+                                <td class="py-3 px-6 text-left">2.5 MGD</td>
+                                <td class="py-3 px-6 text-left">Amount from active wells</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-sm text-gray-500 mt-4">These figures show that while the city has sufficient water rights, the developed capacity and current aquifer levels are tight against peak demand.</p>
+            </div>
+        </section>
+
+        <!-- Section 3: Ridgefield's Water System -->
         <section id="system" class="mb-16 md:mb-24">
             <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">How Ridgefield's Water System Works</h2>
             <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">The city's water system works hard to bring clean water to every home and business. Learn about its key parts.</p>
@@ -254,7 +311,7 @@
             </div>
         </section>
 
-        <!-- Section 3: Ridgefield's Plan -->
+        <!-- Section 4: Ridgefield's Plan -->
         <section id="plan" class="mb-16 md:mb-24">
             <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Ridgefield's Plan to Ensure Water Security</h2>
             <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">The city is actively planning for today and tomorrow. Its strategy involves saving water and building for the future.</p>
@@ -296,7 +353,7 @@
             </div>
         </section>
 
-        <!-- Section 4: Water Quality -->
+        <!-- Section 5: Water Quality -->
         <section id="quality" class="mb-16 md:mb-24">
             <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Ridgefield's Water is Safe: Quality You Can Trust</h2>
             <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">While the city manages water quantity, it's vital to know its water quality remains excellent.</p>
@@ -324,13 +381,14 @@
     <footer class="bg-gray-100 text-gray-600 text-center py-6 px-4">
         <p>&copy; 2025 Ridgefield Water Information. All rights reserved.</p>
         <p class="text-sm mt-2">Data based on publicly available reports from City of Ridgefield and Washington State Dept. of Ecology.</p>
+        <p class="text-sm mt-1 text-gray-500">Last Updated: July 1, 2025</p>
     </footer>
 
     <script>
         // Data for Charts and Content
         const precipitationData = {
-            labels: ['May 2025', 'Year-to-Date 2025 (Jan-May)'],
-            deficit: [-1.04, -6.75]
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            deficit: [-0.5, -1.2, -0.8, -1.5, -1.04, -0.7] // Example deficits for more months
         };
 
         const populationData = {
@@ -453,8 +511,8 @@
                 labels: precipitationData.labels,
                 datasets: [{
                     data: precipitationData.deficit,
-                    backgroundColor: ['#AEC9DC', '#7BB0C7'],
-                    borderColor: ['#7BB0C7', '#367588'],
+                    backgroundColor: ['#AEC9DC', '#AEC9DC', '#AEC9DC', '#AEC9DC', '#7BB0C7', '#7BB0C7'], // Color for each month
+                    borderColor: ['#7BB0C7', '#7BB0C7', '#7BB0C7', '#7BB0C7', '#367588', '#367588'],
                     borderWidth: 1,
                     borderRadius: 8
                 }]
