@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Calm Harmony -->
-    <!-- Application Structure Plan: The SPA uses a thematic, single-page dashboard structure. It starts with a summary hero, then visually explains the two core pressures (environmental vs. community growth) in a "Tale of Two Pressures" section. It then details "Key Water Indicators" in a dedicated section, followed by a "Planning Debate" section presenting arguments for and against the planning thesis, then "How Our Water System Works" with an interactive diagram, "Timeline of Key Water Projects and Planning" for historical context, and finally "Our Plan to Ensure Water Security" which interactively showcases conservation stages and future projects. This narrative flow (Why -> What -> How) is more intuitive for a resident than the report's linear structure, guiding them from the problem's context to the solution. -->
-    <!-- Visualization & Content Choices: 
+    <!-- Application Structure Plan: The SPA uses a thematic, single-page dashboard structure. It starts with a summary hero, then visually explains the two core pressures (environmental vs. community growth) in a "Tale of Two Pressures" section. It then moves to "Water Conservation Strategy" and "New Water Projects" under a combined "Ridgefield's Plan" section, followed by "Key Water Indicators," "Planning Debate," "How Our Water System Works," "Timeline of Key Water Projects and Planning," "Water Quality," and finally "Source Materials." This narrative flow (Why -> How the city plans -> What the city measures -> Planning debate -> How the system works -> Historical context -> Quality -> References) is more intuitive for a resident, guiding them from the problem's context to the solution and system details. -->
+    <!-- Visualization & Content Choices:
         - Goal: Compare precipitation to normal -> Bar Chart (Chart.js) to visually emphasize the deficit, now with more monthly data for better trend visibility.
         - Goal: Show low snowpack -> Custom Gauge (HTML/CSS/Canvas) for an immediate, intuitive understanding of the low percentage.
         - Goal: Show dramatic population increase -> Line Chart (Chart.js) to highlight the steep, multi-decade trend.
@@ -99,11 +99,11 @@
             <div class="text-xl font-bold text-gray-800">Ridgefield's Water Future</div>
             <div class="hidden md:flex space-x-8">
                 <a href="#pressures" class="nav-link">The Pressures</a>
+                <a href="#plan" class="nav-link">Ridgefield's Plan</a>
                 <a href="#indicators" class="nav-link">Key Indicators</a>
                 <a href="#planning-debate" class="nav-link">Planning Debate</a>
                 <a href="#system" class="nav-link">Ridgefield's System</a>
                 <a href="#timeline" class="nav-link">Timeline</a>
-                <a href="#plan" class="nav-link">Ridgefield's Plan</a>
                 <a href="#quality" class="nav-link">Water Quality</a>
                 <a href="#sources" class="nav-link">Sources</a>
             </div>
@@ -115,11 +115,11 @@
         </nav>
         <div id="mobile-menu" class="hidden md:hidden">
             <a href="#pressures" class="block py-2 px-4 text-sm hover:bg-gray-200">The Pressures</a>
+            <a href="#plan" class="block py-2 px-4 text-sm hover:bg-gray-200">Ridgefield's Plan</a>
             <a href="#indicators" class="block py-2 px-4 text-sm hover:bg-gray-200">Key Indicators</a>
             <a href="#planning-debate" class="block py-2 px-4 text-sm hover:bg-gray-200">Planning Debate</a>
             <a href="#system" class="block py-2 px-4 text-sm hover:bg-gray-200">Ridgefield's System</a>
             <a href="#timeline" class="block py-2 px-4 text-sm hover:bg-gray-200">Timeline</a>
-            <a href="#plan" class="block py-2 px-4 text-sm hover:bg-gray-200">Ridgefield's Plan</a>
             <a href="#quality" class="block py-2 px-4 text-sm hover:bg-gray-200">Water Quality</a>
             <a href="#sources" class="block py-2 px-4 text-sm hover:bg-gray-200">Sources</a>
         </div>
@@ -133,6 +133,7 @@
                 Ridgefield's water shortage isn't about quality—the city's water is excellent. It's a challenge of quantity, driven by regional drought and rapid community growth. Here’s a look at the pressures the city faces and the proactive steps it's taking.
             </p>
             <p class="text-sm mt-4 text-gray-500">Prepared by Thomas B. Cox using Gemini Deep Research</p>
+            <p class="text-sm mt-1 text-gray-500">Last Updated: July 6, 2025</p>
         </section>
 
         <!-- Section 1: The Pressures -->
@@ -202,7 +203,49 @@
             </div>
         </section>
 
-        <!-- Section 2: Key Water Indicators -->
+        <!-- Section 2: Ridgefield's Plan -->
+        <section id="plan" class="mb-16 md:mb-24">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Ridgefield's Plan to Ensure Water Security</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">The city is actively planning for today and tomorrow. Its strategy involves saving water and building for the future.</p>
+            
+            <div class="card p-6 md:p-8 mb-8">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Water Conservation Strategy: Stage 3 in Effect (as of Jul 2025)</h3>
+                <p class="mb-6 text-gray-600">Ridgefield uses a 5-stage plan to save water. As of July 2025, Ridgefield is in Stage 3 due to early warm weather. Choose a stage below to see what actions are needed.</p>
+                
+                <div class="flex flex-wrap justify-center gap-2 mb-6">
+                    <button class="stage-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold active" data-stage="3">Stage 3 (Current)</button>
+                    <button class="stage-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold" data-stage="1">Stage 1</button>
+                    <button class="stage-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold" data-stage="2">Stage 2</button>
+                    <button class="stage-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold" data-stage="4">Stage 4</button>
+                    <button class="stage-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold" data-stage="5">Stage 5</button>
+                </div>
+
+                <div id="stage-content">
+                    <!-- Content will be injected here by JavaScript -->
+                </div>
+            </div>
+
+            <div class="card p-6 md:p-8">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Building for Tomorrow: New Water Projects</h3>
+                <p class="mb-6 text-gray-600">To meet future needs from growth, the city is building new water systems. These projects will help make sure Ridgefield has enough water for years to come.</p>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-2 text-gray-700">Eastside Elevated Water Reservoir</h4>
+                    <p class="text-gray-600 mb-4">
+                        This important project involves building a new large water tank on the east side of the city. It will hold about 2.5 million gallons of water. This new tank will help provide enough water for the next 15-20 years, especially for the eastern part of Ridgefield.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-600 space-y-1">
+                        <li>Expected Capacity: 2.5 Million Gallons</li>
+                        <li>Designed to meet needs for 15-20 years</li>
+                        <li>Design Phase: Until Fall 2025</li>
+                        <li>Construction: Summer 2025 - Spring 2027</li>
+                        <li>Future plans for a second tank on site</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Key Water Indicators -->
         <section id="indicators" class="mb-16 md:mb-24">
             <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Key Water Indicators</h2>
             <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">These numbers help show the state of Ridgefield's water supply and demand.</p>
@@ -257,7 +300,7 @@
             </div>
         </section>
 
-        <!-- Section 3: Planning Debate -->
+        <!-- Section 4: Planning Debate -->
         <section id="planning-debate" class="mb-16 md:mb-24">
             <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Ridgefield's Water Planning: A Balanced View</h2>
             <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">The idea that Ridgefield has planned well for its water systems, given its quick growth, has different viewpoints. Here are arguments for and against this idea.</p>
@@ -289,7 +332,7 @@
             </div>
         </section>
 
-        <!-- Section 4: Ridgefield's Water System -->
+        <!-- Section 5: Ridgefield's Water System -->
         <section id="system" class="mb-16 md:mb-24">
             <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">How Ridgefield's Water System Works</h2>
             <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">The city's water system works hard to bring clean water to every home and business. Learn about its key parts.</p>
@@ -362,7 +405,7 @@
             </div>
         </section>
 
-        <!-- Section 5: Timeline of Key Water Projects and Planning -->
+        <!-- Section 6: Timeline of Key Water Projects and Planning -->
         <section id="timeline" class="mb-16 md:mb-24">
             <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Timeline of Key Water Projects and Planning</h2>
             <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">Understanding when key decisions and projects happened helps show the city's ongoing efforts to manage water.</p>
@@ -422,48 +465,6 @@
             </div>
         </section>
 
-        <!-- Section 6: Ridgefield's Plan -->
-        <section id="plan" class="mb-16 md:mb-24">
-            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Ridgefield's Plan to Ensure Water Security</h2>
-            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">The city is actively planning for today and tomorrow. Its strategy involves saving water and building for the future.</p>
-            
-            <div class="card p-6 md:p-8 mb-8">
-                <h3 class="text-xl font-bold mb-4 text-gray-800">Water Conservation Strategy: Stage 3 in Effect</h3>
-                <p class="mb-6 text-gray-600">Ridgefield uses a 5-stage plan to save water. As of June 2025, Ridgefield is in Stage 3 due to early warm weather. Choose a stage below to see what actions are needed.</p>
-                
-                <div class="flex flex-wrap justify-center gap-2 mb-6">
-                    <button class="stage-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold active" data-stage="3">Stage 3 (Current)</button>
-                    <button class="stage-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold" data-stage="1">Stage 1</button>
-                    <button class="stage-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold" data-stage="2">Stage 2</button>
-                    <button class="stage-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold" data-stage="4">Stage 4</button>
-                    <button class="stage-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold" data-stage="5">Stage 5</button>
-                </div>
-
-                <div id="stage-content">
-                    <!-- Content will be injected here by JavaScript -->
-                </div>
-            </div>
-
-            <div class="card p-6 md:p-8">
-                <h3 class="text-xl font-bold mb-4 text-gray-800">Building for Tomorrow: New Water Projects</h3>
-                <p class="mb-6 text-gray-600">To meet future needs from growth, the city is building new water systems. These projects will help make sure Ridgefield has enough water for years to come.</p>
-                
-                <div>
-                    <h4 class="font-bold text-lg mb-2 text-gray-700">Eastside Elevated Water Reservoir</h4>
-                    <p class="text-gray-600 mb-4">
-                        This important project involves building a new large water tank on the east side of the city. It will hold about 2.5 million gallons of water. This new tank will help provide enough water for the next 15-20 years, especially for the eastern part of Ridgefield.
-                    </p>
-                    <ul class="list-disc list-inside text-gray-600 space-y-1">
-                        <li>Expected Capacity: 2.5 Million Gallons</li>
-                        <li>Designed to meet needs for 15-20 years</li>
-                        <li>Design Phase: Until Fall 2025</li>
-                        <li>Construction: Summer 2025 - Spring 2027</li>
-                        <li>Future plans for a second tank on site</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
         <!-- Section 7: Water Quality -->
         <section id="quality" class="mb-16 md:mb-24">
             <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Ensuring Water Quality</h2>
@@ -517,7 +518,7 @@
         <p class="text-sm">Prepared by Thomas B. Cox using Gemini Deep Research</p>
         <p>&copy; 2025 Thomas B. Cox. All rights reserved.</p>
         <p class="text-sm mt-2">Data based on publicly available reports from City of Ridgefield and Washington State Dept. of Ecology.</p>
-        <p class="text-sm mt-1 text-gray-500">Last Updated: July 5, 2025</p>
+        <p class="text-sm mt-1 text-gray-500">Last Updated: July 6, 2025</p>
     </footer>
 
     <script>
