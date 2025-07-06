@@ -10,13 +10,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Calm Harmony -->
-    <!-- Application Structure Plan: The SPA uses a thematic, single-page dashboard structure. It starts with a summary hero, then visually explains the two core pressures (environmental vs. community growth) in a "Tale of Two Pressures" section. It then details "Key Water Indicators" in a dedicated section, followed by "How Our Water System Works" with an interactive diagram, and finally "Our Plan to Ensure Water Security" which interactively showcases conservation stages and future projects. This narrative flow (Why -> What -> How) is more intuitive for a resident than the report's linear structure, guiding them from the problem's context to the solution. -->
+    <!-- Application Structure Plan: The SPA uses a thematic, single-page dashboard structure. It starts with a summary hero, then visually explains the two core pressures (environmental vs. community growth) in a "Tale of Two Pressures" section. It then details "Key Water Indicators" in a dedicated section, followed by a "Planning Debate" section presenting arguments for and against the planning thesis, then "How Our Water System Works" with an interactive diagram, "Timeline of Key Water Projects and Planning" for historical context, and finally "Our Plan to Ensure Water Security" which interactively showcases conservation stages and future projects. This narrative flow (Why -> What -> How) is more intuitive for a resident than the report's linear structure, guiding them from the problem's context to the solution. -->
     <!-- Visualization & Content Choices: 
         - Goal: Compare precipitation to normal -> Bar Chart (Chart.js) to visually emphasize the deficit, now with more monthly data for better trend visibility.
         - Goal: Show low snowpack -> Custom Gauge (HTML/CSS/Canvas) for an immediate, intuitive understanding of the low percentage.
         - Goal: Show dramatic population increase -> Line Chart (Chart.js) to highlight the steep, multi-decade trend.
         - Goal: Present key operational data -> Table (HTML/CSS) in a new "Key Water Indicators" section for clear, scannable metrics.
+        - Goal: Debate planning effectiveness -> Two-column text (HTML/CSS) for a direct comparison of arguments, with simplified formatting and clearer thesis.
         - Goal: Explain the water system -> Interactive Diagram (HTML/CSS) with hover tooltips to simplify a complex process without overwhelming the user.
+        - Goal: Show historical planning and project milestones -> Timeline (HTML/CSS list) to provide chronological context for infrastructure development.
         - Goal: Detail conservation rules -> Interactive Tabs (JS) for each stage, allowing users to actively explore the rules that apply to them, making the information more engaging and less static.
         - Justification: These choices translate dense data and text into scannable, engaging visuals that tell a story, promoting user understanding over simple presentation. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
@@ -98,7 +100,9 @@
             <div class="hidden md:flex space-x-8">
                 <a href="#pressures" class="nav-link">The Pressures</a>
                 <a href="#indicators" class="nav-link">Key Indicators</a>
+                <a href="#planning-debate" class="nav-link">Planning Debate</a>
                 <a href="#system" class="nav-link">Ridgefield's System</a>
+                <a href="#timeline" class="nav-link">Timeline</a>
                 <a href="#plan" class="nav-link">Ridgefield's Plan</a>
                 <a href="#quality" class="nav-link">Water Quality</a>
                 <a href="#sources" class="nav-link">Sources</a>
@@ -112,7 +116,9 @@
         <div id="mobile-menu" class="hidden md:hidden">
             <a href="#pressures" class="block py-2 px-4 text-sm hover:bg-gray-200">The Pressures</a>
             <a href="#indicators" class="block py-2 px-4 text-sm hover:bg-gray-200">Key Indicators</a>
+            <a href="#planning-debate" class="block py-2 px-4 text-sm hover:bg-gray-200">Planning Debate</a>
             <a href="#system" class="block py-2 px-4 text-sm hover:bg-gray-200">Ridgefield's System</a>
+            <a href="#timeline" class="block py-2 px-4 text-sm hover:bg-gray-200">Timeline</a>
             <a href="#plan" class="block py-2 px-4 text-sm hover:bg-gray-200">Ridgefield's Plan</a>
             <a href="#quality" class="block py-2 px-4 text-sm hover:bg-gray-200">Water Quality</a>
             <a href="#sources" class="block py-2 px-4 text-sm hover:bg-gray-200">Sources</a>
@@ -251,7 +257,39 @@
             </div>
         </section>
 
-        <!-- Section 3: Ridgefield's Water System -->
+        <!-- Section 3: Planning Debate -->
+        <section id="planning-debate" class="mb-16 md:mb-24">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Ridgefield's Water Planning: A Balanced View</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">The idea that Ridgefield has planned well for its water systems, given its quick growth, has different viewpoints. Here are arguments for and against this idea.</p>
+
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12">
+                <!-- Case Against the Thesis -->
+                <div class="card p-6 md:p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Case Against the Thesis: Challenges to Effective Planning</h3>
+                    <ul class="list-disc list-inside text-gray-600 space-y-3">
+                        <li><b>Current Shortage & Early Rules:</b> The city is in Stage 3 water saving rules early in the year. This suggests current water use is too high for the available supply.</li>
+                        <li><b>Demand vs. Developed Supply:</b> Peak summer water use (3.5 MGD) is more than what working wells can provide (2.5 MGD). This shows a gap.</li>
+                        <li><b>Lower Aquifer Levels:</b> Water levels underground are deeper than normal. This means current water use might be too much for the aquifer.</li>
+                        <li><b>Fast Population Growth:</b> Very quick growth makes it hard for water systems to expand fast enough to keep up.</li>
+                        <li><b>Need for Backup Water:</b> Relying on Clark Public Utilities for extra water suggests the city's own system is not always enough.</li>
+                    </ul>
+                </div>
+
+                <!-- Case For the Thesis -->
+                <div class="card p-6 md:p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Case For the Thesis: Evidence of Good Planning</h3>
+                    <ul class="list-disc list-inside text-gray-600 space-y-3">
+                        <li><b>Long-Term Water Rights:</b> The city has legal rights to much more water (5.0 MGD) than it uses. This shows foresight for future needs.</li>
+                        <li><b>New Infrastructure:</b> Building a large new Eastside Elevated Water Reservoir (2.5 MG) is a clear step to add more water capacity for the future.</li>
+                        <li><b>Structured Conservation:</b> A 5-stage plan to save water shows the city actively manages water use during different conditions.</li>
+                        <li><b>Backup Supply Agreement:</b> The deal with Clark Public Utilities provides a vital safety net for high demand or emergencies.</li>
+                        <li><b>High Water Quality:</b> Consistently meeting water quality standards shows strong daily management of the water system.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Ridgefield's Water System -->
         <section id="system" class="mb-16 md:mb-24">
             <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">How Ridgefield's Water System Works</h2>
             <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">The city's water system works hard to bring clean water to every home and business. Learn about its key parts.</p>
@@ -324,7 +362,67 @@
             </div>
         </section>
 
-        <!-- Section 4: Ridgefield's Plan -->
+        <!-- Section 5: Timeline of Key Water Projects and Planning -->
+        <section id="timeline" class="mb-16 md:mb-24">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Timeline of Key Water Projects and Planning</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">Understanding when key decisions and projects happened helps show the city's ongoing efforts to manage water.</p>
+
+            <div class="card p-6 md:p-8">
+                <ul class="list-none space-y-6">
+                    <li class="relative pl-8">
+                        <div class="absolute left-0 top-0 h-full w-0.5 bg-blue-300"></div>
+                        <div class="absolute left-0 top-0 w-4 h-4 bg-blue-600 rounded-full -ml-2"></div>
+                        <p class="font-bold text-gray-800">2013: City of Ridgefield Water System Plan</p>
+                        <p class="text-gray-600 text-sm">The city's comprehensive water system plan was initially developed, outlining strategies for water source, quality, transmission, distribution, and storage.</p>
+                    </li>
+                    <li class="relative pl-8">
+                        <div class="absolute left-0 top-0 h-full w-0.5 bg-blue-300"></div>
+                        <div class="absolute left-0 top-0 w-4 h-4 bg-blue-600 rounded-full -ml-2"></div>
+                        <p class="font-bold text-gray-800">June 2014 - Late 2015: Discovery Corridor Wastewater Transmission System (DCWTS) Phase 1 Construction</p>
+                        <p class="text-gray-600 text-sm">While not directly water supply, this major wastewater infrastructure project (completed Feb 2016) shows ongoing utility development to support growth.</p>
+                    </li>
+                    <li class="relative pl-8">
+                        <div class="absolute left-0 top-0 h-full w-0.5 bg-blue-300"></div>
+                        <div class="absolute left-0 top-0 w-4 h-4 bg-blue-600 rounded-full -ml-2"></div>
+                        <p class="font-bold text-gray-800">November 27, 2023: Eastside Elevated Water Reservoir - Solicitation Issued</p>
+                        <p class="text-gray-600 text-sm">The formal process began to seek qualifications for the design of the new 2.5 million-gallon reservoir.</p>
+                    </li>
+                    <li class="relative pl-8">
+                        <div class="absolute left-0 top-0 h-full w-0.5 bg-blue-300"></div>
+                        <div class="absolute left-0 top-0 w-4 h-4 bg-blue-600 rounded-full -ml-2"></div>
+                        <p class="font-bold text-gray-800">January 25, 2024: Eastside Elevated Water Reservoir - Estimated Council Approval</p>
+                        <p class="text-gray-600 text-sm">City Council's anticipated approval for the reservoir project, moving it forward.</p>
+                    </li>
+                    <li class="relative pl-8">
+                        <div class="absolute left-0 top-0 h-full w-0.5 bg-blue-300"></div>
+                        <div class="absolute left-0 top-0 w-4 h-4 bg-blue-600 rounded-full -ml-2"></div>
+                        <p class="font-bold text-gray-800">February 1, 2024: Eastside Elevated Water Reservoir - Estimated Notice to Proceed</p>
+                        <p class="text-gray-600 text-sm">The expected date for the design work to officially begin for the new reservoir.</p>
+                    </li>
+                    <li class="relative pl-8">
+                        <div class="absolute left-0 top-0 h-full w-0.5 bg-blue-300"></div>
+                        <div class="absolute left-0 top-0 w-4 h-4 bg-blue-600 rounded-full -ml-2"></div>
+                        <p class="font-bold text-gray-800">October 2024 (approx.): Water System Plan Update Process</p>
+                        <p class="text-gray-600 text-sm">The city recently updated its 2013 Water System Plan, evaluating existing systems and planning for future demands and regulatory requirements.</p>
+                    </li>
+                    <li class="relative pl-8">
+                        <div class="absolute left-0 top-0 h-full w-0.5 bg-blue-300"></div>
+                        <div class="absolute left-0 top-0 w-4 h-4 bg-blue-600 rounded-full -ml-2"></div>
+                        <p class="font-bold text-gray-800">Fall 2025: Eastside Elevated Water Reservoir - Design Phase Completion (Estimated)</p>
+                        <p class="text-gray-600 text-sm">The design work for the new reservoir is expected to conclude around this time.</p>
+                    </li>
+                    <li class="relative pl-8">
+                        <div class="absolute left-0 top-0 h-full w-0.5 bg-blue-300"></div>
+                        <div class="absolute left-0 top-0 w-4 h-4 bg-blue-600 rounded-full -ml-2"></div>
+                        <p class="font-bold text-gray-800">Summer 2025 - Spring 2027: Eastside Elevated Water Reservoir - Construction (Estimated)</p>
+                        <p class="text-gray-600 text-sm">The period when the physical construction of the new 2.5 million-gallon reservoir is expected to take place.</p>
+                    </li>
+                </ul>
+                <p class="text-sm text-gray-500 mt-4">While specific dates for initial water rights acquisition are not available, this timeline highlights key infrastructure and planning milestones.</p>
+            </div>
+        </section>
+
+        <!-- Section 6: Ridgefield's Plan -->
         <section id="plan" class="mb-16 md:mb-24">
             <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Ridgefield's Plan to Ensure Water Security</h2>
             <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">The city is actively planning for today and tomorrow. Its strategy involves saving water and building for the future.</p>
@@ -366,7 +464,7 @@
             </div>
         </section>
 
-        <!-- Section 5: Water Quality -->
+        <!-- Section 7: Water Quality -->
         <section id="quality" class="mb-16 md:mb-24">
             <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Ensuring Water Quality</h2>
             <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">While the city manages water quantity, its water quality remains consistent with standards.</p>
@@ -395,7 +493,7 @@
             </div>
         </section>
 
-        <!-- Section 6: Source Materials -->
+        <!-- Section 8: Source Materials -->
         <section id="sources" class="mb-16 md:mb-24">
             <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Source Materials</h2>
             <p class="text-center text-gray-600 max-w-2xl mx-auto mb-8">This report is built upon information from the following public sources.</p>
@@ -419,7 +517,7 @@
         <p class="text-sm">Prepared by Thomas B. Cox using Gemini Deep Research</p>
         <p>&copy; 2025 Thomas B. Cox. All rights reserved.</p>
         <p class="text-sm mt-2">Data based on publicly available reports from City of Ridgefield and Washington State Dept. of Ecology.</p>
-        <p class="text-sm mt-1 text-gray-500">Last Updated: July 1, 2025</p>
+        <p class="text-sm mt-1 text-gray-500">Last Updated: July 5, 2025</p>
     </footer>
 
     <script>
@@ -508,7 +606,9 @@
             { id: 19, text: 'City of Ridgefield Water System Plan Overview', url: 'https://www.ridgefieldwa.us/water-system-plan-overview' },
             { id: 20, text: 'Washington State Legislature Climate Resilience Water Planning Mandate (2023)', url: 'https://app.leg.wa.gov/billsummary?BillNumber=1181&Initiative=false&Year=2023' },
             { id: 21, text: 'City of Ridgefield Water Conservation Program', url: 'https://www.ridgefieldwa.us/water-conservation-program' },
-            { id: 22, text: 'City of Ridgefield Eastside Elevated Water Reservoir Project Page', url: 'https://www.ridgefieldwa.us/eastside-reservoir-project' }
+            { id: 22, text: 'City of Ridgefield Eastside Elevated Water Reservoir Project Page', url: 'https://www.ridgefieldwa.us/eastside-reservoir-project' },
+            { id: 23, text: 'Eastside Elevated Water Reservoir - Project overview (OpenGov Procurement)', url: 'https://procurement.opengov.com/portal/ridgefieldwa/projects/69823' },
+            { id: 24, text: 'Discovery Corridor Wastewater Transmission System (CRWWD)', url: 'https://www.crwwd.com/projects/dcwts/' }
         ];
 
 
