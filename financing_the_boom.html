@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financing the Boom: An Interactive Analysis of Ridgefield, WA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: "Energetic & Playful" -->
+    <!-- Application Structure Plan: The SPA is structured as a narrative journey. It starts with a high-level overview ("The Big Picture"), drills down into the core strategy ("The Capital Pivot"), explains the financing mechanism and its risks ("The TIF Engine"), and presents balanced arguments ("The Debate"). This non-linear, thematic structure allows users to explore topics based on interest, making complex financial data more digestible than a traditional report format. The focus is on visual storytelling through interactive charts and clear information hierarchy to guide user understanding. -->
+    <!-- Visualization & Content Choices: 
+        - Population vs. Budget: (Goal: Compare) A combo bar/line chart (Chart.js) was chosen to visually emphasize the disproportionate growth rates of the budget versus the population.
+        - Capital vs. Operating Spending: (Goal: Change) A stacked area chart (Chart.js) effectively shows how the composition of city spending has dramatically shifted over time.
+        - TIF Risk Breakdown: (Goal: Inform/Organize) A structured HTML/CSS grid is used instead of a diagram to clearly present the financial risk metrics for each TIF district, with color highlighting risk factors. This is more direct and accessible than a complex chart. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F7F7F7;
+            color: #1a202c;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px;
+            }
+        }
+        .kpi-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid #E2E8F0;
+        }
+        .kpi-value {
+            font-weight: 900;
+            font-size: 3.5rem;
+            line-height: 1;
+            color: #007EA7;
+        }
+        .kpi-label {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #4A5568;
+        }
+        .section-card {
+            background-color: #FFFFFF;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .flow-arrow {
+            font-size: 2rem;
+            color: #CBD5E0;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-12 max-w-7xl">
+
+        <header class="text-center mb-16">
+            <h1 class="text-5xl md:text-7xl font-black text-[#003459] mb-3">Financing the Boom</h1>
+            <p class="text-xl md:text-2xl text-[#007EA7] max-w-3xl mx-auto">An Interactive Analysis of Ridgefield's Public Spending, Growth, and Financial Risk</p>
+            <div class="mt-6 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 max-w-4xl mx-auto rounded-r-lg text-left">
+                <p class="font-bold">Important Context:</p>
+                <p class="text-sm">This analysis focuses on the period from 2019 to the present, as this is when comprehensive digital budget documents are most accessible. This timeframe may omit key data from earlier years that could potentially alter the conclusions drawn.</p>
+            </div>
+        </header>
+
+        <main class="space-y-16">
+            
+            <section id="big-picture" class="section-card">
+                <h2 class="text-3xl md:text-4xl font-black text-center text-[#003459] mb-2">The Big Picture: A City Transformed</h2>
+                <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">Between 2019 and its 2023 peak, Ridgefield's population grew rapidly. However, its city budget expanded at a far more explosive rate, signaling a fundamental and ambitious shift in fiscal strategy aimed at attracting large-scale commercial development.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    <div class="kpi-card">
+                        <div class="kpi-value">38.6%</div>
+                        <div class="kpi-label">Population Increase (2020-2023)</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">450%</div>
+                        <div class="kpi-label">Total Budget Increase (2019-2023)</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </section>
+
+            <section id="capital-pivot" class="section-card">
+                <h2 class="text-3xl md:text-4xl font-black text-center text-[#003459] mb-2">The Capital Pivot: A Shift in Spending</h2>
+                <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">The budget explosion is driven by a massive pivot towards capital projects—primarily infrastructure like roads and utilities. While day-to-day operating funds have grown, they are dwarfed by the spending on long-term projects designed to facilitate future development.</p>
+                 <div class="text-center mb-8">
+                    <p class="text-gray-600 text-lg">Capital Budget Growth (2019-2024)</p>
+                    <p class="text-7xl font-black text-[#00A8E8]">1,200%+ <span class="text-4xl">▲</span></p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="spendingRatioChart"></canvas>
+                </div>
+            </section>
+            
+            <section id="tif-engine">
+                <h2 class="text-3xl md:text-4xl font-black text-center text-[#003459] mb-2">The TIF Engine: Fueling Growth with Future Taxes</h2>
+                <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">To fund its ambitions, Ridgefield relies heavily on Tax Increment Financing (TIF). This tool allows the city to borrow against projected future property tax growth. However, independent state reviews show this strategy places significant financial risk on current taxpayers if development doesn't meet forecasts.</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="section-card border-t-4 border-[#00A8E8]">
+                        <h3 class="text-2xl font-black text-[#007EA7] mb-4">City "Pioneer Junction" TIF</h3>
+                        <div class="space-y-4">
+                             <div class="text-center kpi-card">
+                                <p class="kpi-label">Projected Private Value Increase</p>
+                                <p class="text-3xl font-bold text-green-700">$482.6 Million</p>
+                            </div>
+                            <div class="flex justify-center items-center"><span class="flow-arrow">⬇</span></div>
+                             <div class="kpi-card bg-red-50 border border-red-200">
+                                <p class="text-sm text-red-700 font-semibold">POTENTIAL TAXPAYER RISK</p>
+                                <p class="text-4xl font-black text-red-600">$35.7M - $49.9M</p>
+                                <p class="text-xs text-red-700 mt-2">This is the potential shortfall in TIF revenue that would have to be covered by the City's General Fund, according to the State Treasurer's review.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-card border-t-4 border-[#F7B801]">
+                        <h3 class="text-2xl font-black text-[#D49D00] mb-4">Port Waterfront TIF</h3>
+                        <div class="space-y-4">
+                           <div class="text-center kpi-card">
+                                <p class="kpi-label">Projected Private Value Increase</p>
+                                <p class="text-3xl font-bold text-green-700">$598.0 Million</p>
+                            </div>
+                            <div class="flex justify-center items-center"><span class="flow-arrow">⬇</span></div>
+                            <div class="kpi-card bg-red-50 border border-red-200">
+                                <p class="text-sm text-red-700 font-semibold">POTENTIAL TAXPAYER RISK</p>
+                                <p class="text-4xl font-black text-red-600">$40 Million</p>
+                                <p class="text-xs text-red-700 mt-2">This represents a large, unfunded gap in the project plan, with funding sources "to be identified in the future".</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="debate" class="section-card">
+                 <h2 class="text-3xl md:text-4xl font-black text-center text-[#003459] mb-8">The Debate: Two Views of the Strategy</h2>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="p-6 bg-green-50 rounded-lg border border-green-200">
+                        <h3 class="text-2xl font-black text-green-800 mb-3">✅ The Case FOR the Strategy</h3>
+                        <ul class="list-disc list-inside space-y-2 text-green-900">
+                            <li><span class="font-semibold">Proactive Planning:</span> Investing in infrastructure ahead of growth is more cost-effective and attracts high-value business.</li>
+                            <li><span class="font-semibold">Necessary Tools:</span> TIF is seen as essential to unlock private investment that would not happen otherwise.</li>
+                            <li><span class="font-semibold">Sustainable Tax Base:</span> The goal is a long-term shift away from residential taxes to a more resilient commercial tax base.</li>
+                             <li><span class="font-semibold">High Economic Payoff:</span> Projects are expected to create thousands of jobs and generate millions in new revenue for the community.</li>
+                        </ul>
+                    </div>
+                    <div class="p-6 bg-red-50 rounded-lg border border-red-200">
+                        <h3 class="text-2xl font-black text-red-800 mb-3">❌ The Case AGAINST the Strategy</h3>
+                         <ul class="list-disc list-inside space-y-2 text-red-900">
+                            <li><span class="font-semibold">Publicly-Held Risk:</span> Taxpayers are responsible for tens of millions in debt if development projections fail.</li>
+                            <li><span class="font-semibold">Shifting, Not Creating:</span> TIF may simply move development from elsewhere in the region, rather than creating new growth.</li>
+                            <li><span class="font-semibold">Current Needs Underfunded:</span> Massive capital spending can come at the expense of services for current residents.</li>
+                             <li><span class="font-semibold">Appearance of Favoritism:</span> Non-competitive contracts and connected interests can erode public trust.</li>
+                        </ul>
+                    </div>
+                 </div>
+            </section>
+
+        </main>
+
+        <footer class="text-center mt-20 pt-8 border-t border-gray-300">
+            <div class="text-xs text-gray-500 mt-8 space-y-2 max-w-3xl mx-auto">
+                <p><strong>Disclaimer:</strong> This interactive application is an analysis of publicly available data and is for informational purposes only. It does not constitute legal or financial advice. Interpretations and conclusions are based on the available information. Readers are encouraged to conduct their own research.</p>
+                <p>Copyright Thomas B. Cox. This application was compiled using Gemini Deep Research.</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const chartColors = {
+            primary: '#00A8E8', // Blue
+            secondary: '#007EA7', // Dark Blue
+            accent: '#F7B801', // Yellow/Gold
+            text: '#1a202c',
+            red: '#E53E3E',
+            green: '#38A169',
+        };
+        
+        const defaultTooltipOptions = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                              return label.join(' ');
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        };
+
+        const growthChartCtx = document.getElementById('growthChart')?.getContext('2d');
+        if (growthChartCtx) {
+            new Chart(growthChartCtx, {
+                data: {
+                    labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
+                    datasets: [{
+                        label: 'Total Budget (Millions)',
+                        data: [19.7, 18.8, 27.4, 62.9, 88.9, 88.1],
+                        backgroundColor: chartColors.primary,
+                        yAxisID: 'y',
+                        type: 'bar',
+                        order: 2,
+                    }, {
+                        label: 'Population',
+                        data: [9935, 10839, 11885, 12931, 15027, 16123],
+                        backgroundColor: chartColors.accent,
+                        borderColor: chartColors.accent,
+                        yAxisID: 'y1',
+                        type: 'line',
+                        order: 1,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    ...defaultTooltipOptions,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            title: { display: true, text: 'Budget in Millions ($)' },
+                            min: 0,
+                            max: 100,
+                            grid: { color: '#E2E8F0' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            position: 'right',
+                            title: { display: true, text: 'Population' },
+                            grid: { drawOnChartArea: false },
+                            min: 0,
+                            max: 50000
+                        },
+                    }
+                }
+            });
+        }
+
+        const spendingRatioCtx = document.getElementById('spendingRatioChart')?.getContext('2d');
+        if (spendingRatioCtx) {
+            new Chart(spendingRatioCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
+                    datasets: [{
+                        label: 'Operating Budget ($M)',
+                        data: [11.2, 12.4, 14.1, 19.5, 23.3, 24.7],
+                        backgroundColor: 'rgba(0, 126, 167, 0.5)',
+                        borderColor: chartColors.secondary,
+                        fill: true,
+                        tension: 0.3
+                    },{
+                        label: 'Capital Budget ($M)',
+                        data: [3.9, 3.2, 6.2, 28.3, 49.6, 52.3],
+                        backgroundColor: 'rgba(0, 168, 232, 0.5)',
+                        borderColor: chartColors.primary,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    ...defaultTooltipOptions,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            title: { display: true, text: 'Budget in Millions ($)' },
+                            grid: { color: '#E2E8F0' }
+                        }
+                    }
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>
