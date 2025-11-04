@@ -1,7 +1,7 @@
 ---
 layout: default
 title: The Dishonest American People's Compact
-permalink: /americanpeoplescompact_org/
+permalink: /americanpeoplescompact/
 ---
 # Analysis of the American People's Compact: Examining Claims of Nonpartisanship
 
